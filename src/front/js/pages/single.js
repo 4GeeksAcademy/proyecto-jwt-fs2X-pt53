@@ -1,28 +1,29 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
 
-export const Single = props => {
-	const { store, actions } = useContext(Context);
-	const params = useParams();
+export const Inicio = () => {
+    const navigate = useNavigate();
+    const [usuarios, setUsuarios] = useState([]); // Estado para almacenar los usuarios
+    const { store, actions } = useContext(Context);
+    const [profesionalesLateral, setProfesionalesLateral] = useState([]); // Estado local para manejar el listado
+    const [contactoProfesionales, setContactoProfesionales] = useState([]);
+    const [loading, setLoading] = useState(true); // Estado de carga
+    console.log("Profesionales en store:", store.profesionales);
 
-	return (
-		<div className="jumbotron">
-			<h1 className="display-4">This will show the demo element: {store.demo[params.theid].title}</h1>
-			<img src={rigoImageUrl} />
-			<hr className="my-4" />
+    useEffect(() => {
+        // Verificar si hay un token de autenticación
+        const token = localStorage.getItem("token"); // O sessionStorage.getItem("authToken")
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+       
 
-			<Link to="/">
-				<span className="btn btn-primary btn-lg" href="#" role="button">
-					Back home
-				</span>
-			</Link>
-		</div>
-	);
-};
+    }, [navigate]); // Asegúrate de que no se ejecute innecesariamente
 
-Single.propTypes = {
-	match: PropTypes.object
+
+    return (
+        <h1>Hola mundo</h1>
+    );
 };
