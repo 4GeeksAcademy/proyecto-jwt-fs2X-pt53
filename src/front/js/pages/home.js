@@ -11,6 +11,7 @@ export const AddUser = () => {
     const navigate = useNavigate();
 
     const handleCreateUser = async () => {
+        setErrorMessages([]);
         const errors = [];
 
         // Validar cada campo
@@ -18,9 +19,8 @@ export const AddUser = () => {
         if (!email.trim()) errors.push("Correo Electrónico");
         if (!password.trim()) errors.push("Contraseña");
         if (!confirmPassword.trim()) errors.push("Confirmar Contraseña");
-        if (password && confirmPassword && password !== confirmPassword) {
-            errors.push("Las contraseñas no coinciden");
-        }
+        if (password !== confirmPassword) errors.push("Las contraseñas no coinciden");
+    
 
         if (errors.length > 0) {
             setErrorMessages(errors);
@@ -28,12 +28,7 @@ export const AddUser = () => {
         }
 
 
-        const data = {
-
-            email: email,
-            password: password
-
-        };
+        const data = { email, password };
 
 
         try {
@@ -41,28 +36,21 @@ export const AddUser = () => {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // Añade el token aquí
                 }
             });
 
-            if (res.ok) {
+            const result = await res.json();
+            if (res.status === 201) {
                 alert("Registro Exitoso");
-                console.log("Usuario agregado correctamente");
-                navigate("/login"); // Redirige después de un registro exitoso
+                navigate("/login");
             } else {
-                const errorData = await res.json();
-                throw new Error(errorData.message || "Error al registrar usuario");
+                setErrorMessages([result.error || "Error al registrar usuario"]);
             }
         } catch (error) {
-            console.warn(error);
+            setErrorMessages(["Error en la conexión con el servidor"]);
         }
-
-        // Resetear los campos
-
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-
     };
 
     return (
@@ -98,8 +86,7 @@ export const AddUser = () => {
                     <input
                         type="password"
                         className="form-control"
-                        placeholder="Ingresa tu password"
-                        required
+                        placeholder="Ingresa tu contraseña"                        
                         onChange={(e) => setPassword(e.target.value)}
                         value={password}
                     />

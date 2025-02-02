@@ -6,6 +6,6 @@ body{
 }
 .form-container{
     background-color: lightgray;
-    border: solid 2px black;
+    border: solid 2px gray;
     border-radius: 10px;
 }

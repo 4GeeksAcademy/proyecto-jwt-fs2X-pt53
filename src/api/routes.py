@@ -26,62 +26,46 @@ def handle_hello():
 # registro
 @api.route('/registro', methods=['POST'])
 def registro():
-    email = request.json.get("email")
-    password = request.json.get("password")
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
 
 
-    if not email: 
-        return jsonify({"error":"email es requerido"}), 400    
-    if not password: 
-        return jsonify({"error":"password es requerido"}), 400
-    
-    
-    encontrado = User.query.filter_by(email=email).first()
-    if encontrado: 
-        return jsonify({"error":"email ya esta registrado"}), 400
-    
+    if not email or not password:
+        return jsonify({"error": "Email y password son requeridos"}), 400
 
-    user = User()
-    user.email = email    
-    user.password = generate_password_hash(password)
+    if User.query.filter_by(email=email).first():
+        return jsonify({"error": "Email ya está registrado"}), 400
 
-
+    hashed_password = generate_password_hash(password)
+    user = User(email=email, password=hashed_password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({"mensaje":"registro exitoso, inicie sesion por favor."}), 200
+
+    return jsonify({"mensaje": "Registro exitoso, inicie sesión"}), 201
 
 # login
 @api.route("/login", methods=["POST"])
 def login():
     
-    datos = request.json
-    email = datos.get('email')
-    password = datos.get('password')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-    if not email:
-        return jsonify({"status": "fail", "mesage": "Email is required"}), 422
-    
-    if not password: 
-        return jsonify({"status": "fail", "mesage": "Password is required"}), 422
-    
-    found = User.query.filter_by(email=email).first()
-    
-    if not found:
-        return jsonify({"status": "fail", "message": "Usuario No Registrado"}), 404
-    
-    if not check_password_hash(found.password, password):
-        return jsonify({"status": "fail", "message": "CREDENCIALES INCORRECTAS"}), 401
+    if not email or not password:
+        return jsonify({"status": "fail", "message": "Email y password son requeridos"}), 400
 
-    access_token = create_access_token(identity=found.id, additional_claims={
-        "email": found.email,
-        "password": found.password,
-    })
+    user = User.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({"status": "fail", "message": "Credenciales incorrectas"}), 401
 
-    return jsonify({ "status": "success", "message": "login sucessfully", "access_token": access_token, "user": found.serialize()}), 200
+    access_token = create_access_token(identity=user.id, additional_claims={"email": user.email})
+    return jsonify({"status": "success", "message": "Login exitoso", "access_token": access_token, "user": user.serialize()}), 200
 
 # protected
 
-@api.route("/inicio")
+@api.route("/inicio", methods=["GET"])
 @jwt_required()
 def inicio():
-    return jsonify({"mensaje":"esta es la ruta protegida"})
+    current_user = get_jwt_identity()
+    return jsonify({"mensaje": "Ruta protegida accesible", "usuario": current_user})

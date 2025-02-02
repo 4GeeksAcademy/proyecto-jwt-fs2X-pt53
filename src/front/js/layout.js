@@ -24,8 +24,8 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <Routes>                        
-                        <Route element={<AddUser />} path="/register" />
+                    <Routes>                                       
+                        <Route element={<AddUser />} path="/" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Inicio />} path="/inicio" />
                         <Route element={<h1>Not found!</h1>} />

@@ -30,6 +30,7 @@ export const Login = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`, // Añade el token aquí
                 },
                 body: JSON.stringify({ email, password }),
             });

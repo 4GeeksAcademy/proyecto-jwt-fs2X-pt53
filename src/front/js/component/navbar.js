@@ -35,7 +35,7 @@ export const Navbar = () => {
                             (
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link active text-dark register mx-3" aria-current="page" to="/register"><strong>Registrate</strong></Link>
+                                        <Link className="nav-link active text-dark register mx-3" aria-current="page" to="/"><strong>Registrate</strong></Link>
                                     </li>
                                     <li className="nav-item dropdown">
                                         <Link className="nav-link active text-dark login" aria-current="page" to="/login"><strong>Inicio Sesion</strong></Link>
