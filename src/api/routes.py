@@ -9,10 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, JWTManager
 
 api = Blueprint('api', __name__)
-app = Flask(__name__)
-
-app.config["JWT_SECRET_KEY"] = "top-secret"  # ¡Cambia las palabras "super-secret" por otra cosa!
-jwt = JWTManager(app)
 
 # Allow CORS requests to this API
 CORS(api)

@@ -58,8 +58,7 @@ export const AddUser = () => {
         }
 
         
-        setEmail("");
-        setBirthdate("");
+        setEmail("");        
         setPassword("");
         setConfirmPassword("");        
         setErrorMessages([]);
