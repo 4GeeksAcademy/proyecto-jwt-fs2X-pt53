@@ -82,7 +82,7 @@ export const Login = () => {
                         <label className="w-100">Correo Electrónico</label>
                         <input
                             className="form-control w-100"
-                            type="email"
+                            type="text"
                             placeholder="Ingresa tu correo electrónico"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}

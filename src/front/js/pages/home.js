@@ -83,7 +83,7 @@ export const AddUser = () => {
                 <div className="mb-3">
                     <label>Correo Electrónico</label>
                     <input
-                        type="email"
+                        type="text"
                         className="form-control"
                         placeholder="Ingresa tu correo electrónico"
                         required

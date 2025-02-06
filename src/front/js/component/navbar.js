@@ -29,7 +29,7 @@ export const Navbar = () => {
                         {token ?
                             (
                                 <li className="nav-item">
-                                    <a className="nav-link active text-dark mx-3 btn-cs" aria-current="page" onClick={() => logout()}><strong>Cerrar Sesión</strong></a>
+                                    <a className="nav-link active text-dark mx-3 btn-cs cursor-pointer" aria-current="page" onClick={() => logout()}><strong>Cerrar Sesión</strong></a>
                                 </li>
                             ) :
                             (
