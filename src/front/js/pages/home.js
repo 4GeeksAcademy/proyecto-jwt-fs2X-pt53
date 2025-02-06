@@ -19,7 +19,9 @@ export const AddUser = () => {
         if (!email.trim()) errors.push("Correo Electrónico");
         if (!password.trim()) errors.push("Contraseña");
         if (!confirmPassword.trim()) errors.push("Confirmar Contraseña");
-        if (password !== confirmPassword) errors.push("Las contraseñas no coinciden");
+        if (password && confirmPassword && password !== confirmPassword) {
+            errors.push("Las contraseñas no coinciden");
+        }
     
 
         if (errors.length > 0) {
@@ -28,29 +30,39 @@ export const AddUser = () => {
         }
 
 
-        const data = { email, password };
+        const data = { 
+            email: email,
+            password: password,
+         };
 
 
         try {
-            const res = await fetch("https://fantastic-space-pancake-jj46w9477g4gcppgw-3001.app.github.dev/api/registro", {
+            const res = await fetch(process.env.BACKEND_URL + "/api/registro", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`, // Añade el token aquí
-                }
+                }                    
             });
 
-            const result = await res.json();
-            if (res.status === 201) {
+            if (res.ok) {
                 alert("Registro Exitoso");
-                navigate("/login");
+                console.log("Usuario agregado correctamente");
+                navigate("/login"); // Redirige después de un registro exitoso
             } else {
-                setErrorMessages([result.error || "Error al registrar usuario"]);
+                const errorData = await res.json();
+                throw new Error(errorData.message || "Error al registrar usuario");
             }
         } catch (error) {
-            setErrorMessages(["Error en la conexión con el servidor"]);
+            console.warn(error);
         }
+
+        
+        setEmail("");
+        setBirthdate("");
+        setPassword("");
+        setConfirmPassword("");        
+        setErrorMessages([]);
     };
 
     return (
@@ -102,8 +114,7 @@ export const AddUser = () => {
                         value={confirmPassword}
                     />
                 </div>
-                <div className="d-flex justify-content-between align-items-center">
-                    <Link to="/" className="btn btn-outline-secondary btnVolver text-dark">Volver</Link>
+                <div className="d-flex justify-content-between align-items-center">                    
                     <button className="btn btn-primary btnRegistrar text-dark" onClick={handleCreateUser}>
                         Registrar
                     </button>

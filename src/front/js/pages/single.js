@@ -16,7 +16,7 @@ export const Inicio = () => {
         }
        
 
-    }, [navigate]); // Asegúrate de que no se ejecute innecesariamente
+    }, []); 
 
 
     return (

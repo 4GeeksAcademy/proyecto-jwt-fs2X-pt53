@@ -26,11 +26,10 @@ export const Login = () => {
         e.preventDefault(); // Evita que la página se recargue
 
         try {
-            const response = await fetch("https://fantastic-space-pancake-jj46w9477g4gcppgw-3001.app.github.dev/api/login", {
+            const response = await fetch(process.env.BACKEND_URL+"/api/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`, // Añade el token aquí
+                    "Content-Type": "application/json",                   
                 },
                 body: JSON.stringify({ email, password }),
             });
